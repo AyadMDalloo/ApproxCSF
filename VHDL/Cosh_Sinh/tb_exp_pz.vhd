@@ -109,8 +109,8 @@ BEGIN
    stim_proc: process
    file inA1 : text open read_mode is "A.txt";
 	file inA2 : text open read_mode is "A.txt";
-	file outB1 : text open write_mode is "P.txt";---sinh
-	file outB2 : text open write_mode is "N.txt";---cosh
+	file outB1 : text open write_mode is "P.txt";
+	file outB2 : text open write_mode is "N.txt";
 	variable Lin,Lout : line;
 	variable Ka,Kb,c : integer;
 	variable T: real;

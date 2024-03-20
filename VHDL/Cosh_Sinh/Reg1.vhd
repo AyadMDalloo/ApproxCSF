@@ -40,13 +40,11 @@ architecture RTL of Reg1 is
 begin
       process (clk,rst)
     begin
-       if rising_edge(clk) then
-			if (rst ='1') then
-				q <= '0';
-			else	  
-				q <= d;
-			end if;
-		 end if;
+       if (rst ='1') then
+           q <= '0';
+       elsif rising_edge(clk) then
+           q <= d;
+       end if;
     end process;
 
 end RTL;

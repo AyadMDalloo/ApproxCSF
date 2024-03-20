@@ -33,15 +33,14 @@ end Reg;
 architecture rtl of Reg is
 
 begin
-    process (clk)
+    process (clk,rst)
     begin
-       if rising_edge(clk) then
-		    if (rst ='1') then
-                 q <= (others=>'0');
-		
-		    elsif (CE='1') then
+       if (rst ='1') then
+           q <= (others=>'0');
+       elsif rising_edge(clk) then
+		     if (CE='1') then
                q <= d;
-			 end if;
+			  end if;
        end if;
     end process;
 end rtl;

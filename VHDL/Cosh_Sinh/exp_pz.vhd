@@ -44,7 +44,7 @@ end exp_pz;
 architecture RTL of exp_pz is
 
 constant Ri : STD_LOGIC_VECTOR(N-1 downto 0) :=frac2bin(32.0/log(2.0),N,Nint);
-constant Ro : std_Logic_vector(2*N-5 downto 0) :="0000000101100010111001000011";--constant Ro : std_Logic_vector(N+1 downto 0) :=frac2bin(log(2.0)/32.0,N2,1);
+constant Ro : std_Logic_vector(N+1 downto 0) :=frac2bin(log(2.0)/32.0,N2,1);
 constant C1 : real:=1.021897148654117;
 constant C2 : real:=0.9785720620877;
 constant LUTN : memory:=Gen_LUT(mem,C2);
@@ -54,7 +54,7 @@ signal t_N,t_Nr : std_logic_vector(N-6 downto 0);
 
 -----------------------------------------
 signal t_Co,Tone1,Tone,Tone2 : std_logic;
-signal t_Zn :std_logic_vector(2*N+6 downto 0);
+signal t_Zn :std_logic_vector(2*N-4 downto 0);
 
 
 
@@ -122,23 +122,14 @@ P2_RegN: Reg Generic Map(N=>N-5) PORT MAP(
 --Nr<=t_Nr;---------------------------------------------------------------------------------------
 --------------------------------------------------
 -----calculate Zn
---U_MultDSz: MultiDiffSz Generic Map (N1=>N-5, N2=>N2) PORT MAP(
---																						X1 =>t_Nr,---12 bit integer+ 1 sign=13
---																						X2 => Ro,--- 1 bit integer +1 sign+16 fraction=18
---																						F => t_Zn	); --13+18=31 bit
---
--- ----Convert Zn 31bit to 16 bit with s6.9
--- 
---t_Zn16<=t_Zn(N1+N2- 3) & t_Zn(get_Hlvl(N1+N2-2,2*Nint-1,4) downto get_Llvl(N1+N2-2,2*Nfrac-1,2*Nfrac-2));--s4.16
-
-U_MultDSz: MultiDiffSz Generic Map (N1=>N-5, N2=>2*N-4) PORT MAP(
-																						X1 =>t_Nr,---10 bit integer+ 1 sign=11 bit
-																						X2 => Ro,--- 1 bit integer +1 sign+26 fraction=28
-																						F => t_Zn	); --11+28=39 bit
+U_MultDSz: MultiDiffSz Generic Map (N1=>N-5, N2=>N2) PORT MAP(
+																						X1 =>t_Nr,---12 bit integer+ 1 sign=13
+																						X2 => Ro,--- 1 bit integer +1 sign+16 fraction=18
+																						F => t_Zn	); --13+18=31 bit
 
  ----Convert Zn 31bit to 16 bit with s6.9
  
-t_Zn16<=t_Zn(2*N+6) & t_Zn(get_Hlvl(2*N+7,2*Nint-1,4) downto get_Llvl(2*N+7,26,2*Nfrac-3));--s4.16
+t_Zn16<=t_Zn(N1+N2- 3) & t_Zn(get_Hlvl(N1+N2-2,2*Nint-1,4) downto get_Llvl(N1+N2-2,2*Nfrac-1,2*Nfrac-2));--s4.16
 P3a_RegZn: Reg Generic Map(N=>N+5) PORT MAP(
 		d => t_Zn16,
 		rst => rst,
